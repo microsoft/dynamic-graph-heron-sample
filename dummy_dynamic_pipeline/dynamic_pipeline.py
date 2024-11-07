@@ -18,6 +18,7 @@ from components import gen_silos, consume_model
 from dynamic_subgraph import dynamic_subgraph
 
 
+# !!! Change below value for the default_compute_target to use your own compute cluster
 @pipeline(default_compute_target="gega-cluster")
 def dynamic_parent_pipeline(silos: str, valid_data: Input):
     silos_node = gen_silos(params=silos, extra_string="dynamic")
