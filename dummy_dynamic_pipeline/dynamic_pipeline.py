@@ -19,7 +19,7 @@ from dynamic_subgraph import dynamic_subgraph
 
 
 # !!! Change below value for the default_compute_target to use your own compute cluster
-@pipeline(default_compute_target="gega-cluster")
+@pipeline(default_compute_target="CWC-Cluster")
 def dynamic_parent_pipeline(silos: str, valid_data: Input):
     silos_node = gen_silos(params=silos, extra_string="dynamic")
 
@@ -27,7 +27,7 @@ def dynamic_parent_pipeline(silos: str, valid_data: Input):
         input_silos=silos_node.outputs.output, valid_data=valid_data
     )
     # Note: this user identity is required to submit a dynamic run since we need create the dynamic run on behalf of the user
-    subgraph_node.identity = UserIdentityConfiguration()
+    # subgraph_node.identity = UserIdentityConfiguration()
 
     consume_model(
         model=subgraph_node.outputs.output_model,
