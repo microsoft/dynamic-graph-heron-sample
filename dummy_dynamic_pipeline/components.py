@@ -6,6 +6,7 @@ from uuid import uuid4
 from pathlib import Path
 
 from mldesigner import command_component, Input, Output
+from file_helper import copy_files
 
 
 @command_component
@@ -81,6 +82,18 @@ def consume_model(
     condition: Input(type="boolean"),
 ):
     """Print the content of metric file in given folder."""
-    print((Path(model) / "model").read_text())
-    print((Path(metric) / "metric").read_text())
     print(condition)
+
+@command_component
+def merge_folders(
+    merged_folder: Output(type="uri_folder"),
+    create_subfolder_for_each_input: Input(type="boolean", optional=True),
+    **kwargs,
+):
+    """This component merges a dynamic count of inputs into one output."""
+    for input_name, input_folder in kwargs.items():
+        print("Copying input {input_name}")
+        dest_folder = Path(merged_folder)
+        if create_subfolder_for_each_input:
+            dest_folder /= input_name
+        copy_files(src_folder=input_folder, dest_folder=dest_folder, preserve_structure=True)

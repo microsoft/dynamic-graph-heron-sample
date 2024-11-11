@@ -8,7 +8,7 @@ from azure.ai.ml.dsl._group_decorator import group
 
 from mldesigner.dsl import dynamic
 
-from components import train_model, validate, single_output_condition_func
+from components import train_model, validate, single_output_condition_func, merge_folders
 
 # define multiple outputs for dynamic subgraph with @group decorator
 @group
@@ -59,6 +59,9 @@ def dynamic_subgraph(
     # Read list of silos from a json file input
     # Note: calling `pipeline_input.result()` inside @dynamic will return actual value of the input.
     # In this case, input_silos is an PipelineInput object, so we need to call `result()` to get the actual value.
+
+    model_results = {}
+    metric_results = {}
     with open(input_silos.result()) as fin:
         silos = json.load(fin)
 
@@ -68,11 +71,16 @@ def dynamic_subgraph(
             model=train_node.outputs.output_model, silo=silo, valid_data=valid_data
         )
 
+        model_results[silo] = train_node.outputs.output_model
+        metric_results[silo] = validate_node.outputs.output_metric 
+
     condition_node = single_output_condition_func(address="h")
+    merge_models = merge_folders(create_subfolder_for_each_input=True, **model_results)
+    merge_metrics = merge_folders(create_subfolder_for_each_input=True, **metric_results)
 
     return {
-        "output_model": train_node.outputs.output_model,
-        "output_metric": validate_node.outputs.output_metric,
+        "output_model": merge_models.outputs.merged_folder,
+        "output_metric": merge_metrics.outputs.merged_folder,
         "condition_output": condition_node.outputs.output,
     }
     # Note: returning DynamicSubgraphOutputs object like this is not supported currently.

@@ -19,7 +19,7 @@ from dynamic_subgraph import dynamic_subgraph
 
 
 # !!! Change below value for the default_compute_target to use your own compute cluster
-@pipeline(default_compute_target="CWC-Cluster")
+@pipeline(default_compute_target="CWC-Cluster", display_name="Dynamic_pipeline_with_dynamic_input_component")
 def dynamic_parent_pipeline(silos: str, valid_data: Input):
     silos_node = gen_silos(params=silos, extra_string="dynamic")
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     credential = DefaultAzureCredential()
     ml_client =  MLClient.from_config(credential=credential)
     dynamic_pipeline = dynamic_parent_pipeline(
-        silos="silo1,silo2,silo3",
+        silos="silo1,silo2,silo3,silo4,silo5,silo6",
         valid_data=Input(
             path="wasbs://demo@dprepdata.blob.core.windows.net/Titanic.csv", type="uri_file"
     ),
