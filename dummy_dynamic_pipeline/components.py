@@ -13,20 +13,18 @@ from file_helper import copy_files
 def gen_silos(
     params: str,
     output: Output(type="uri_file"),
-    **kwargs,
 ):
     """Generate a json serialized uri_file according to given params.
     For example, if params is "1,2,3", then the output will be a json serialized uri_file with content ["1", "2", "3"].
     """
     with open(Path(output), "w") as fout:
         json.dump(params.split(","), fout)
-    print(f"Extra args: {kwargs}")
 
 
 @command_component(
     environment="./component_env.yaml",
 )
-def single_output_condition_func(
+def single_output_condition(
     address: str,
 ) -> Output(type="boolean", is_control=True):
     # validate the address is https or not

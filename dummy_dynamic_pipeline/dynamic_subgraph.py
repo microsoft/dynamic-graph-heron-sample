@@ -5,10 +5,18 @@ import json
 
 from azure.ai.ml import Input, Output
 from azure.ai.ml.dsl._group_decorator import group
+from azure.identity import DefaultAzureCredential
+from azure.ai.ml import MLClient
 
 from mldesigner.dsl import dynamic
 
-from components import train_model, validate, single_output_condition_func, merge_folders
+from components import train_model, validate, single_output_condition, merge_folders
+
+credential = DefaultAzureCredential()
+ml_client =  MLClient.from_config(credential=credential)
+train_model_func = ml_client.components.create_or_update(train_model)
+validate_func = ml_client.components.create_or_update(validate)
+single_output_condition_func = ml_client.components.create_or_update(single_output_condition)
 
 # define multiple outputs for dynamic subgraph with @group decorator
 @group
@@ -66,8 +74,8 @@ def dynamic_subgraph(
         silos = json.load(fin)
 
     for silo in silos:
-        train_node = train_model(silo=silo)
-        validate_node = validate(
+        train_node = train_model_func(silo=silo)
+        validate_node = validate_func(
             model=train_node.outputs.output_model, silo=silo, valid_data=valid_data
         )
 
