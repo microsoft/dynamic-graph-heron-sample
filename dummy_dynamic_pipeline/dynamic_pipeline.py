@@ -14,19 +14,15 @@ from azure.ai.ml import Input, Output
 
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
-from components import gen_silos, consume_model
-from dynamic_subgraph import dynamic_subgraph
-
 
 credential = DefaultAzureCredential()
 ml_client =  MLClient.from_config(credential=credential)
-dynamic_subgraph_func = ml_client.components.create_or_update(dynamic_subgraph)
-gen_silos_func = ml_client.components.create_or_update(gen_silos)
-consume_model_func = ml_client.components.create_or_update(consume_model)
-
+consume_model_func = ml_client.components.get(name="consume_model")
+gen_silos_func = ml_client.components.get(name="gen_silos")
+dynamic_subgraph_func = ml_client.components.get(name="dynamic_subgraph")
 
 # !!! Change below value for the default_compute_target to use your own compute cluster
-@pipeline(default_compute_target="CWC-Cluster", display_name="Dynamic_pipeline_with_registered_components")
+@pipeline(default_compute_target="CWC-Cluster", display_name="dynamic_pipeline_with_registered_components")
 def dynamic_parent_pipeline(silos: str, valid_data: Input):
     silos_node = gen_silos_func(params=silos)
 
@@ -49,5 +45,5 @@ if __name__ == "__main__":
             path="wasbs://demo@dprepdata.blob.core.windows.net/Titanic.csv", type="uri_file"
         ),
     )
-    # parallel_pipeline.settings._dataset_access_mode = "DatasetInDpv2"
+
     ml_client.jobs.create_or_update(dynamic_pipeline, experiment_name="dynamic_pipeline")

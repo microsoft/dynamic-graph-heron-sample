@@ -21,9 +21,7 @@ def gen_silos(
         json.dump(params.split(","), fout)
 
 
-@command_component(
-    environment="./component_env.yaml",
-)
+@command_component
 def single_output_condition(
     address: str,
 ) -> Output(type="boolean", is_control=True):

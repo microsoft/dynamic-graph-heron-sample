@@ -1,0 +1,19 @@
+$schema: https://azuremlschemas.azureedge.net/development/commandComponent.schema.json
+name: train_model
+display_name: train_model
+description: Train a model for silo i.
+type: command
+version: 2
+is_deterministic: true
+tags:
+  codegenBy: mldesigner
+inputs:
+  silo:
+    type: string
+outputs:
+  output_model:
+    type: uri_folder
+code: ./
+environment: azureml://registries/azureml/environments/mldesigner/versions/30
+command: mldesigner execute --source components.py --name train_model --inputs silo='${{inputs.silo}}'
+  --outputs output_model='${{outputs.output_model}}'

@@ -1,0 +1,21 @@
+$schema: https://azuremlschemas.azureedge.net/development/commandComponent.schema.json
+name: gen_silos
+display_name: gen_silos
+description: "Generate a json serialized uri_file according to given params.\n   \
+  \ For example, if params is \"1,2,3\", then the output will be a json serialized\
+  \ uri_file with content [\"1\", \"2\", \"3\"].\n    "
+type: command
+version: 2
+is_deterministic: true
+tags:
+  codegenBy: mldesigner
+inputs:
+  params:
+    type: string
+outputs:
+  output:
+    type: uri_file
+code: ./
+environment: azureml://registries/azureml/environments/mldesigner/versions/30
+command: mldesigner execute --source components.py --name gen_silos --inputs params='${{inputs.params}}'
+  --outputs output='${{outputs.output}}'

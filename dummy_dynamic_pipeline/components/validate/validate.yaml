@@ -1,0 +1,23 @@
+$schema: https://azuremlschemas.azureedge.net/development/commandComponent.schema.json
+name: validate
+display_name: validate
+description: Validate the model for silo i.
+type: command
+version: 2
+is_deterministic: true
+tags:
+  codegenBy: mldesigner
+inputs:
+  model:
+    type: uri_folder
+  silo:
+    type: string
+  valid_data:
+    type: uri_file
+outputs:
+  output_metric:
+    type: uri_folder
+code: ./
+environment: azureml://registries/azureml/environments/mldesigner/versions/30
+command: mldesigner execute --source components.py --name validate --inputs model='${{inputs.model}}'
+  silo='${{inputs.silo}}' valid_data='${{inputs.valid_data}}' --outputs output_metric='${{outputs.output_metric}}'

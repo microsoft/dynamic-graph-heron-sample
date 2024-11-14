@@ -5,18 +5,18 @@ import json
 
 from azure.ai.ml import Input, Output
 from azure.ai.ml.dsl._group_decorator import group
-from azure.identity import DefaultAzureCredential
-from azure.ai.ml import MLClient
 
 from mldesigner.dsl import dynamic
+from azure.ai.ml import MLClient
+from azure.identity import DefaultAzureCredential
 
-from components import train_model, validate, single_output_condition, merge_folders
+from components import merge_folders
 
 credential = DefaultAzureCredential()
 ml_client =  MLClient.from_config(credential=credential)
-train_model_func = ml_client.components.create_or_update(train_model)
-validate_func = ml_client.components.create_or_update(validate)
-single_output_condition_func = ml_client.components.create_or_update(single_output_condition)
+train_model_func = ml_client.components.get(name="train_model")
+validate_func = ml_client.components.get(name="validate")
+single_output_condition_func = ml_client.components.get(name="single_output_condition")
 
 # define multiple outputs for dynamic subgraph with @group decorator
 @group
@@ -24,6 +24,7 @@ class DynamicSubgraphOutputs:
     output_model: Output(type="uri_folder")
     output_metric: Output(type="uri_folder")
     condition_output: Output(type="boolean", is_control=True)
+
 
 ENVIRONMENT_DICT = dict(
     image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04",
