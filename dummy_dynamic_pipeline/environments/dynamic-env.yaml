@@ -1,0 +1,5 @@
+name: dynamic-env
+version: 1
+image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
+conda_file: dynamic-conda.yaml
+description: Environment created for dynamic subgraph

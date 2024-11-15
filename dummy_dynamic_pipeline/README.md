@@ -1,5 +1,6 @@
 # dummy_dynamic_pipeline
-1. Register all the components to your workspace.
+1. Register all the components to your workspace by using:
+az ml component create --file yaml_file
 
 2. How to change to use your own compute cluster:
 - Change the default_compute_target value in dynamic_pipeline.py

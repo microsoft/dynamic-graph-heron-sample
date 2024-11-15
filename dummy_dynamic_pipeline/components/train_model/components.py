@@ -24,7 +24,7 @@ def gen_silos(
 @command_component
 def single_output_condition(
     address: str,
-) -> Output(type="boolean", is_control=True):
+) -> Output(type="boolean"):
     # validate the address is https or not
     result = address.startswith("https://")
     return result

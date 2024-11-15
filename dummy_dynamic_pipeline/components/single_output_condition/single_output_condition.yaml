@@ -1,8 +1,8 @@
-$schema: https://azuremlschemas.azureedge.net/development/commandComponent.schema.json
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: single_output_condition
 display_name: single_output_condition
 type: command
-version: 3
+version: 2
 is_deterministic: true
 tags:
   codegenBy: mldesigner
@@ -12,7 +12,6 @@ inputs:
 outputs:
   output:
     type: boolean
-    is_control: true
 code: ./
 environment: azureml://registries/azureml/environments/mldesigner/versions/30
 command: mldesigner execute --source components.py --name single_output_condition

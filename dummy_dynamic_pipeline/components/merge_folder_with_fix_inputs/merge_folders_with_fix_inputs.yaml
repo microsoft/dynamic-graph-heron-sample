@@ -1,0 +1,51 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: merge_folders_with_fix_inputs
+display_name: merge_folders_with_fix_inputs
+description: This component merges all inputs into one output.
+type: command
+version: 1
+is_deterministic: true
+tags:
+  codegenBy: mldesigner
+inputs:
+  create_subfolder_for_each_input:
+    type: boolean
+    optional: true
+  silo1:
+    type: uri_folder
+    optional: true
+  silo2:
+    type: uri_folder
+    optional: true
+  silo3:
+    type: uri_folder
+    optional: true
+  silo4:
+    type: uri_folder
+    optional: true
+  silo5:
+    type: uri_folder
+    optional: true
+  silo6:
+    type: uri_folder
+    optional: true
+  silo7:
+    type: uri_folder
+    optional: true
+  silo8:
+    type: uri_folder
+    optional: true
+  silo9:
+    type: uri_folder
+    optional: true
+outputs:
+  merged_folder:
+    type: uri_folder
+code: .
+environment: azureml://registries/azureml/environments/mldesigner/labels/latest
+command: mldesigner execute --source components.py --name merge_folders_with_fix_inputs
+  --inputs $[[create_subfolder_for_each_input='${{inputs.create_subfolder_for_each_input}}']]
+  $[[silo1='${{inputs.silo1}}']] $[[silo2='${{inputs.silo2}}']] $[[silo3='${{inputs.silo3}}']]
+  $[[silo4='${{inputs.silo4}}']] $[[silo5='${{inputs.silo5}}']] $[[silo6='${{inputs.silo6}}']]
+  $[[silo7='${{inputs.silo7}}']] $[[silo8='${{inputs.silo8}}']] $[[silo9='${{inputs.silo9}}']]
+  --outputs merged_folder='${{outputs.merged_folder}}'

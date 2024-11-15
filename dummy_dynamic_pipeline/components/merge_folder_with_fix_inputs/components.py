@@ -93,3 +93,23 @@ def merge_folders(
         if create_subfolder_for_each_input:
             dest_folder /= input_name
         copy_files(src_folder=input_folder, dest_folder=dest_folder, preserve_structure=True)
+
+
+@command_component
+def merge_folders_with_fix_inputs(
+    merged_folder: Output(type="uri_folder"),
+    create_subfolder_for_each_input: Input(type="boolean", optional=True),
+    silo1: Input(type="uri_folder", optional=True),
+    silo2: Input(type="uri_folder", optional=True),
+    silo3: Input(type="uri_folder", optional=True),
+    silo4: Input(type="uri_folder", optional=True),
+    silo5: Input(type="uri_folder", optional=True),
+    silo6: Input(type="uri_folder", optional=True),
+    silo7: Input(type="uri_folder", optional=True),
+    silo8: Input(type="uri_folder", optional=True),
+    silo9: Input(type="uri_folder", optional=True)
+):
+    """This component merges all inputs into one output."""
+    dest_folder = Path(merged_folder)
+    dest_folder /= "silo1"
+    copy_files(src_folder=silo1, dest_folder=dest_folder, preserve_structure=True)

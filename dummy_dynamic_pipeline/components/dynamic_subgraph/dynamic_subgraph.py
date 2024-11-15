@@ -10,20 +10,19 @@ from mldesigner.dsl import dynamic
 from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 
-from components import merge_folders
-
 credential = DefaultAzureCredential()
 ml_client =  MLClient.from_config(credential=credential)
 train_model_func = ml_client.components.get(name="train_model")
 validate_func = ml_client.components.get(name="validate")
 single_output_condition_func = ml_client.components.get(name="single_output_condition")
+merge_folders_with_fix_inputs_func = ml_client.components.get(name="merge_folders_with_fix_inputs")
 
 # define multiple outputs for dynamic subgraph with @group decorator
 @group
 class DynamicSubgraphOutputs:
     output_model: Output(type="uri_folder")
     output_metric: Output(type="uri_folder")
-    condition_output: Output(type="boolean", is_control=True)
+    condition_output: Output(type="boolean")
 
 
 ENVIRONMENT_DICT = dict(
@@ -84,8 +83,8 @@ def dynamic_subgraph(
         metric_results[silo] = validate_node.outputs.output_metric 
 
     condition_node = single_output_condition_func(address="h")
-    merge_models = merge_folders(create_subfolder_for_each_input=True, **model_results)
-    merge_metrics = merge_folders(create_subfolder_for_each_input=True, **metric_results)
+    merge_models = merge_folders_with_fix_inputs_func(create_subfolder_for_each_input=True, **model_results)
+    merge_metrics = merge_folders_with_fix_inputs_func(create_subfolder_for_each_input=True, **metric_results)
 
     return {
         "output_model": merge_models.outputs.merged_folder,

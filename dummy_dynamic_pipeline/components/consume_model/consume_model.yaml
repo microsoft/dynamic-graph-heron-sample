@@ -3,7 +3,7 @@ name: consume_model
 display_name: consume_model
 description: Print the content of metric file in given folder.
 type: command
-version: 3
+version: 2
 is_deterministic: true
 tags:
   codegenBy: mldesigner
