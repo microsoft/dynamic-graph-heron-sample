@@ -32,6 +32,6 @@ if __name__ == "__main__":
                 path="wasbs://demo@dprepdata.blob.core.windows.net/Titanic.csv", type="uri_file"
             ),
     )
-    dynamic_pipeline.settings.default_compute_target = "CWC-Cluster"
+    dynamic_pipeline.settings.default_compute = "CWC-Cluster"
 
     ml_client.jobs.create_or_update(dynamic_pipeline, experiment_name="dynamic_pipeline")
