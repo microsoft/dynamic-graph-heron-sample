@@ -30,7 +30,7 @@ def dynamic_parent_pipeline(silos: str, valid_data: Input):
         input_silos=silos_node.outputs.output, valid_data=valid_data
     )
     # Note: this user identity is required to submit a dynamic run since we need create the dynamic run on behalf of the user
-    # subgraph_node.identity = UserIdentityConfiguration()
+    subgraph_node.identity = UserIdentityConfiguration()
 
     consume_node = consume_model_func(
         model=subgraph_node.outputs.output_model,

@@ -5,7 +5,7 @@ description: "A dynamic subgraph that trains model and validates it multiple tim
   \ according to specified input.\n\n    :param input_silos: A file with a list of\
   \ input silos.\n    :param valid_data: Data to validate the model.\n    "
 type: command
-version: 2
+version: 3
 is_deterministic: true
 tags:
   codegenBy: mldesigner

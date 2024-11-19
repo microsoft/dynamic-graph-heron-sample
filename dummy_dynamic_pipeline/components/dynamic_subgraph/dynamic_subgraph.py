@@ -8,14 +8,7 @@ from azure.ai.ml.dsl._group_decorator import group
 
 from mldesigner.dsl import dynamic
 from azure.ai.ml import MLClient
-from azure.identity import DefaultAzureCredential
-
-credential = DefaultAzureCredential()
-ml_client =  MLClient.from_config(credential=credential)
-train_model_func = ml_client.components.get(name="train_model")
-validate_func = ml_client.components.get(name="validate")
-single_output_condition_func = ml_client.components.get(name="single_output_condition")
-merge_folders_with_fix_inputs_func = ml_client.components.get(name="merge_folders_with_fix_inputs")
+from azure.ai.ml.identity import AzureMLOnBehalfOfCredential
 
 # define multiple outputs for dynamic subgraph with @group decorator
 @group
@@ -68,6 +61,13 @@ def dynamic_subgraph(
     # Note: calling `pipeline_input.result()` inside @dynamic will return actual value of the input.
     # In this case, input_silos is an PipelineInput object, so we need to call `result()` to get the actual value.
 
+    credential = AzureMLOnBehalfOfCredential()
+    ml_client =  MLClient.from_config(credential=credential)
+    train_model_func = ml_client.components.get(name="train_model")
+    validate_func = ml_client.components.get(name="validate")
+    single_output_condition_func = ml_client.components.get(name="single_output_condition")
+    merge_folders_with_fix_inputs_func = ml_client.components.get(name="merge_folders_with_fix_inputs")
+    
     model_results = {}
     metric_results = {}
     with open(input_silos.result()) as fin:
