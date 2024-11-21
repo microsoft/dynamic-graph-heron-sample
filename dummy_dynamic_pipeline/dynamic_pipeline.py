@@ -22,7 +22,7 @@ gen_silos_func = ml_client.components.get(name="gen_silos")
 dynamic_subgraph_func = ml_client.components.get(name="dynamic_subgraph")
 
 # !!! Change below value for the default_compute_target to use your own compute cluster
-@pipeline(default_compute_target="CWC-Cluster", display_name="dynamic_pipeline_with_registered_components", force_rerun=True)
+@pipeline(default_compute_target="CWC-Cluster", display_name="dynamic_pipeline_with_registered_components")
 def dynamic_parent_pipeline(silos: str, valid_data: Input):
     silos_node = gen_silos_func(params=silos)
 
