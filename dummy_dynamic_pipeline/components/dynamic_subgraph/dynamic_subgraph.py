@@ -18,37 +18,7 @@ class DynamicSubgraphOutputs:
     condition_output: Output(type="boolean")
 
 
-ENVIRONMENT_DICT = dict(
-    image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04",
-    conda_file={
-        "name": "default_environment",
-        "channels": ["defaults"],
-        "dependencies": [
-            "python=3.9.16",
-            "pip=21.2.2",
-            {
-                "pip": [
-                    "--extra-index-url=https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-python/pypi/simple/",
-                    "azure-ai-ml==1.6.0a20230317001",
-                    "azure-core==1.25.1",
-                    "azure-common==1.1.28",
-                    "azure-identity==1.11.0",
-                    "azure-ml-component==0.9.18.post2",
-                    "azureml-core==1.45.0.post2",
-                    "azureml-mlflow==1.49.0",
-                    "mldesigner==0.1.0b12",
-                    "mlflow==2.1.1",
-                    "mlflow-skinny==2.3.2",
-                    "mltable==1.0.0",
-                    "wheel==0.38.4"
-                ]
-            },
-        ],
-    }
-)
-
-
-@dynamic(environment=ENVIRONMENT_DICT)
+@dynamic()
 def dynamic_subgraph(
     input_silos: Input(type="uri_file"), valid_data: Input(type="uri_file")
 ) -> DynamicSubgraphOutputs:

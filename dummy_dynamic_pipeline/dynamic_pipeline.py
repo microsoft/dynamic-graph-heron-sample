@@ -6,7 +6,7 @@ print(os.environ["AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED"])
 
 import json
 from azure.ai.ml.dsl import pipeline
-from azure.ai.ml import UserIdentityConfiguration
+from azure.ai.ml.entities import UserIdentityConfiguration
 # from azure.ai.ml import PipelineJob
 # pipeline_job: PipelineJob
 # pipeline_job.settings._dataset_access_mode = "DatasetInDpv2"
@@ -22,7 +22,7 @@ gen_silos_func = ml_client.components.get(name="gen_silos")
 dynamic_subgraph_func = ml_client.components.get(name="dynamic_subgraph")
 
 # !!! Change below value for the default_compute_target to use your own compute cluster
-@pipeline(default_compute_target="CWC-Cluster", display_name="dynamic_pipeline_with_registered_components")
+@pipeline(default_compute_target="CWC-Cluster", display_name="dynamic_pipeline_with_registered_components", force_rerun=True)
 def dynamic_parent_pipeline(silos: str, valid_data: Input):
     silos_node = gen_silos_func(params=silos)
 
