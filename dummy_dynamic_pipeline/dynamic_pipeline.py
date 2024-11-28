@@ -16,13 +16,20 @@ from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 
 credential = DefaultAzureCredential()
-ml_client =  MLClient.from_config(credential=credential)
+# ml_client =  MLClient.from_config(credential=credential)
+ml_client = MLClient(
+    credential=credential,
+    subscription_id="8e083f31-61f8-49c5-96a2-1366c4e338c6",
+    resource_group_name="BizChat",
+    workspace_name="CWC-WS"
+)
 consume_model_func = ml_client.components.get(name="consume_model")
 gen_silos_func = ml_client.components.get(name="gen_silos")
 dynamic_subgraph_func = ml_client.components.get(name="dynamic_subgraph")
 
 # !!! Change below value for the default_compute_target to use your own compute cluster
-@pipeline(default_compute_target="CWC-Cluster", display_name="dynamic_pipeline_with_registered_components")
+# @pipeline(default_compute_target="CWC-Cluster", display_name="dynamic_pipeline_with_registered_components")
+@pipeline(display_name="dynamic_pipeline_with_registered_components")
 def dynamic_parent_pipeline(silos: str, valid_data: Input):
     silos_node = gen_silos_func(params=silos)
 
@@ -39,11 +46,14 @@ def dynamic_parent_pipeline(silos: str, valid_data: Input):
     )
 
 if __name__ == "__main__":
-    dynamic_pipeline = dynamic_parent_pipeline(
-        silos="silo1,silo2,silo3,silo4,silo5,silo6",
-        valid_data=Input(
-            path="wasbs://demo@dprepdata.blob.core.windows.net/Titanic.csv", type="uri_file"
-        ),
+    registered_pipeline_components = ml_client.components.create_or_update(
+        dynamic_parent_pipeline
     )
+    # dynamic_pipeline = dynamic_parent_pipeline(
+    #     silos="silo1,silo2,silo3,silo4,silo5,silo6",
+    #     valid_data=Input(
+    #         path="wasbs://demo@dprepdata.blob.core.windows.net/Titanic.csv", type="uri_file"
+    #     ),
+    # )
 
-    ml_client.jobs.create_or_update(dynamic_pipeline, experiment_name="dynamic_pipeline")
+    # ml_client.jobs.create_or_update(dynamic_pipeline, experiment_name="dynamic_pipeline")
